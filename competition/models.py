@@ -3,6 +3,7 @@ from django.db import models
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
+    slug = models.SlugField(blank=True, null=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -11,6 +12,7 @@ class Article(models.Model):
 class Competition(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(blank=True, null=True)
+    theme_color = models.CharField(max_length=30, blank=True, null=True)
     year = models.IntegerField()
     competition_logo = models.ImageField(upload_to='competitions/logo/')
     cover_image = models.ImageField(upload_to='competitions/covers/')
@@ -20,6 +22,8 @@ class Competition(models.Model):
     detail_content = models.TextField()
     content_image = models.ImageField(upload_to='competitions/detail/')
     scoreboard = models.FileField(upload_to='competitions/scoreboard/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -41,12 +45,11 @@ class CompetitionWinningTeam(models.Model):
 
 class MediaImage(models.Model):
     image = models.ImageField(upload_to='images/')
-    # title = models.CharField(max_length=200, blank=True)
-    tag = models.CharField(max_length=15, choices=[
-        ('article', 'Article'),
+    tag = models.CharField(max_length=20, choices=[
         ('gallery', 'Gallery'),
         ('sponsor', 'Sponsor'),
-        ('main_prize', 'Main_Prize'),
+        ('main_prize_laptop', 'Main_Prize_Laptop'),
+        ('main_prize_phone', 'Main_Prize_Phone'),
         ('other_prize', 'Other_Prize'),
         ('general', 'General'),
     ])
@@ -57,10 +60,11 @@ class MediaImage(models.Model):
 
 
 class MediaVideo(models.Model):
-    # title = models.CharField(max_length=200)
     video_file = models.FileField(upload_to='videos/')
     competition = models.ForeignKey(
         Competition, null=True, blank=True, on_delete=models.CASCADE, related_name='competition_videos')
+    article = models.ForeignKey(
+        Article, null=True, blank=True, on_delete=models.CASCADE, related_name='article_videos')
 
 
 class FAQ(models.Model):

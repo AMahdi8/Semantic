@@ -39,7 +39,7 @@ class CompetitionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Competition
-        fields = ['title', 'year', 'competition_logo', 'cover_image', 'competition_report', 'detail_title', 'detail_content',
+        fields = ['title', 'slug', 'year', 'competition_logo', 'cover_image', 'competition_report', 'detail_title', 'detail_content',
                   'content_image', 'scoreboard', 'competition_images', 'competition_winners', 'competition_videos', 'faqs']
 
 
@@ -47,5 +47,15 @@ class CompetitionListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Competition
-        fields = ['title', 'year', 'cover_image',
+        fields = ['title', 'slug', 'year', 'cover_image',
                   'competition_report', 'competition_logo']
+
+
+class ArticleSerializer(serializers.ModelSerializer):
+    article_images = MediaImageSerializer(many=True)
+    article_viedos = MediaVideoSerializer(many=True)
+
+    class Meta:
+        model = Article
+        fields = ['title', 'slug', 'content',
+                  'article_images', 'article_videos', 'created_at']
